@@ -1,0 +1,9 @@
+.container{
+    width: 80%;
+    margin: 0px auto;
+    border: 1px solid blue;
+}
+
+.tbl-student{
+    width: 100%;
+}
