@@ -1,0 +1,99 @@
+{
+  "user": [
+    {
+      "id": "1",
+      "email": "member@gmail.com",
+      "password": "123@#",
+      "type": "google",
+      "role": 1
+    },
+    {
+      "id": "2",
+      "email": "admin@gmail.com",
+      "password": "abc@#",
+      "type": "system",
+      "role": 2
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Electronic"
+    },
+    {
+      "id": "2",
+      "name": "Computer"
+    },
+    {
+      "id": "3",
+      "name": "Smartphone"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Android TV 90 inch",
+      "price": 10000000,
+      "description": "",
+      "category": 1,
+      "brands": [
+        {
+          "id": 1,
+          "name": "Samsung"
+        },
+        {
+          "id": 2,
+          "name": "LG"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Camera 360 IP",
+      "price": 1500000,
+      "description": "",
+      "category": 1,
+      "brands": [
+        {
+          "id": 1,
+          "name": "Samsung"
+        },
+        {
+          "id": 2,
+          "name": "Xiaomi"
+        },
+        {
+          "id": 3,
+          "name": "LG"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "IPhone 16 ProMax (Future)",
+      "price": 50000000,
+      "description": "",
+      "category": 3,
+      "brands": [
+        {
+          "id": 1,
+          "name": "Apple"
+        }
+      ]
+    },
+    {
+      "id": "1832",
+      "name": "aD",
+      "price": 0,
+      "description": "",
+      "category": 2
+    },
+    {
+      "id": "0af6",
+      "name": "TRANTUBA",
+      "price": 124353,
+      "description": "ASDASD",
+      "category": 1
+    }
+  ]
+}
