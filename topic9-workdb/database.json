@@ -1,0 +1,93 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "member@gmail.com",
+      "password": "123@#",
+      "type": "google",
+      "role": 1
+    },
+    {
+      "id": "2",
+      "email": "admin@fpt.edu.vn",
+      "password": "abc@#",
+      "type": "system",
+      "role": 2
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Electronic"
+    },
+    {
+      "id": "2",
+      "name": "Computer"
+    },
+    {
+      "id": "3",
+      "name": "Smartphone"
+    },
+    {
+      "id": "4",
+      "name": "Laptop"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Android TV 90 inch",
+      "price": 9000000,
+      "description": "",
+      "category": 2,
+      "brands": [
+        {
+          "id": 1,
+          "name": "Samsung"
+        },
+        {
+          "id": 2,
+          "name": "Sony"
+        },
+        {
+          "id": 3,
+          "name": "LG"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Camera 360 IP",
+      "price": 1500000,
+      "description": "",
+      "category": 1,
+      "brands": [
+        {
+          "id": 1,
+          "name": "Panasonic."
+        },
+        {
+          "id": 2,
+          "name": "Xiaomi"
+        },
+        {
+          "id": 3,
+          "name": "VANTECH"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Iphone 16 Pro",
+      "price": 50000000,
+      "description": "",
+      "category": 1,
+      "brands": [
+        {
+          "id": 1,
+          "name": "Iphone"
+        }
+      ]
+    }
+  ]
+}

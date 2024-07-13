@@ -48,7 +48,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Camera 360 IP",
       "price": 1500000,
       "description": "",
@@ -69,7 +69,7 @@
       ]
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "IPhone 16 ProMax (Future)",
       "price": 50000000,
       "description": "",
@@ -82,18 +82,11 @@
       ]
     },
     {
-      "id": "1832",
-      "name": "aD",
-      "price": 0,
-      "description": "",
+      "id": "362e",
+      "name": "tuan",
+      "price": 100000,
+      "description": "tuan",
       "category": 2
-    },
-    {
-      "id": "0af6",
-      "name": "TRANTUBA",
-      "price": 124353,
-      "description": "ASDASD",
-      "category": 1
     }
   ]
 }

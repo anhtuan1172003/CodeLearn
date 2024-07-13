@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Container, Form, Row, Table } from "react-bootstrap";
+import { Col, Container, Form, Row, Table, Modal, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export default function Product() {
@@ -8,21 +8,40 @@ export default function Product() {
     const [search, setSearch] = useState("");
     const [catId, setCatId] = useState("all");
     const [pPrice, setPPrice] = useState(100000000);
+    const [pBrand, setPBrand] = useState([]);
+    const [selectedBrand, setSelectedBrand] = useState(pBrand);
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     useEffect(() => {
         //GER - URI: http://localhost:9999/products
         fetch("http://localhost:9999/products")
             .then(res => res.json())
             .then(result => {
+
+                const uniqueBrands = new Set();
+                result.forEach(p => {
+                    if (p.brands && p.brands.length > 0) {
+                        p.brands.forEach(b => uniqueBrands.add(b.name));
+                    }
+                });
+                uniqueBrands.add("Khác"); // Add "Khác" to the brands list
+                setPBrand(Array.from(uniqueBrands));
+
+                let filteredProducts = result;
                 if (catId != "all") {
                     if (search.length > 0)
-                        setProducts(result.filter(p => p.category == catId && p.name.toLowerCase().includes(search.toLowerCase())))
+                        filteredProducts = filteredProducts.filter(p => p.category == catId && p.name.toLowerCase().includes(search.toLowerCase()) && p.price <= pPrice)
                     else
-                        setProducts(result.filter(p => p.category == catId))
+                        filteredProducts = filteredProducts.filter(p => p.category == catId && p.price <= pPrice)
                     // setProducts(result.filter(p => p.category == catId))
                 }
-                else
-                    setProducts(result.filter(p => p.name.toLowerCase().includes(search.toLowerCase())));
+                else {
+                    filteredProducts = filteredProducts.filter(p => p.name.toLowerCase().includes(search.toLowerCase()) && p.price <= pPrice);
+                }
+
+                setProducts(filteredProducts);
             })
             .catch(error => console.log(error));
 
@@ -32,13 +51,14 @@ export default function Product() {
             .then(result => setCategories(result))
             .catch(error => console.log(error));
 
-    }, [catId, search]);
+    }, [catId, search, pPrice]);
+
 
     //handle delete action
 
-    function handleDelete(id){
-        if(window.confirm("Do you want to delete?")){
-            fetch("http://localhost:9999/products/" + id, {method: "DELETE"});
+    function handleDelete(id) {
+        if (window.confirm("Do you want to delete?")) {
+            fetch("http://localhost:9999/products/" + id, { method: "DELETE" });
             alert("Delete success");
             window.location.reload();
         }
@@ -72,11 +92,23 @@ export default function Product() {
                         </Row>
                         <Row>
                             <Col>
-                                <Form.Range onChange={e => setPPrice(e.target.value)} min={0} max={100000000} />
+                                <Form.Range onChange={e => setPPrice(e.target.value)} min={0} max={100000000} value={pPrice} />
                             </Col>
                         </Row>
                         <Row>
                             <Col><h5>By Brands</h5></Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                {pBrand?.map(brand =>
+                                    <Form.Check key={brand}
+                                        type="checkbox"
+                                        label={brand}
+                                        value={brand}
+                                        />
+                                )}
+
+                            </Col>
                         </Row>
                         <Row>
                             <Col></Col>
@@ -98,8 +130,8 @@ export default function Product() {
                             </Col>
                         </Row>
                         <Row className="mb-3">
-                            <Col style={{textAlign: "right"}}>
-                            <Link to ={"/product/create"} className="btn btn-success">Create new product</Link>
+                            <Col style={{ textAlign: "right" }}>
+                                <Link to={"/product/create"} className="btn btn-success">Create new product</Link>
                             </Col>
                         </Row>
                         <Row>
@@ -126,6 +158,32 @@ export default function Product() {
                                                                 return <span>{b.name}<br /></span>
                                                             })
                                                         }
+                                                        <Button variant="primary" onClick={handleShow}>
+                                                            Update
+                                                        </Button>
+
+                                                        <Modal show={show} onHide={handleClose} animation={false}>
+                                                            <Modal.Header closeButton>
+                                                                <Modal.Title>Brands</Modal.Title>
+                                                            </Modal.Header>
+                                                            <Modal.Body>
+                                                                {pBrand?.map(brand =>
+                                                                    <Form.Check key={brand}
+                                                                        type="checkbox"
+                                                                        label={brand}
+                                                                        value={brand} 
+                                                                        />
+                                                                )}
+                                                            </Modal.Body>
+                                                            <Modal.Footer>
+                                                                <Button variant="secondary" onClick={handleClose}>
+                                                                    Close
+                                                                </Button>
+                                                                <Button variant="primary" onClick={handleClose}>
+                                                                    Save Changes
+                                                                </Button>
+                                                            </Modal.Footer>
+                                                        </Modal>
                                                     </td>
                                                     <td>
                                                         {
@@ -136,7 +194,7 @@ export default function Product() {
                                                         <Link to={`/product/edit/${p.id}`}>Edit</Link>
                                                     </td>
                                                     <td>
-                                                        <Link to='#' onClick={()=>handleDelete(p.id)}>Delete</Link>
+                                                        <Link to='#' onClick={() => handleDelete(p.id)}>Delete</Link>
                                                     </td>
                                                 </tr>
                                             ))
