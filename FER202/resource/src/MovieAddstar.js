@@ -5,16 +5,14 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function MovieAddstar() {
     const { id } = useParams(); // Get the movie ID from the URL
     const navigate = useNavigate();
-    const [movie, setMovie] = useState();
-    const [mStar, setMStar] = useState([]);  // For the current stars of the movie
-    const [star, setStar] = useState([]);  // For the selected stars
-    const [allStars, setAllStars] = useState([]);  // List of all available stars
-    const [mRelease, setMRelease] = useState();
-    const [mDes, setMDES] = useState();
-    const [mTitle, setMTitle] = useState();
-    const [mPro, setMPro] = useState();
-    const [mDirec, setMDirec] = useState();
-    const [mGenres, setMGenres] = useState();
+    const [movie, setMovie] = useState("");
+    const [star, setStar] = useState([]); // Danh sách ID star đã chọn
+    const [allStars, setAllStars] = useState([]); // List of all available stars
+    const [mRelease, setMRelease] = useState("");
+    const [mDes, setMDES] = useState("");
+    const [mPro, setMPro] = useState("");
+    const [mDirec, setMDirec] = useState("");
+    const [mGenres, setMGenres] = useState([]);
 
     useEffect(() => {
         // Fetch stars
@@ -28,12 +26,17 @@ export default function MovieAddstar() {
             .then(res => res.json())
             .then(movie => {
                 setMovie(movie.title);
-                setMStar(movie.stars);
+                // Đảm bảo star IDs được lưu ở cùng định dạng
+                const starIds = movie.stars.map(starId => 
+                    typeof starId === 'string' ? starId : String(starId)
+                );
+                setStar(starIds);
                 setMDES(movie.description);
                 setMDirec(movie.director);
                 setMPro(movie.producer);
                 setMRelease(movie.release);
                 setMGenres(movie.genres);
+                console.log("Loaded stars:", starIds); // Debug
             })
             .catch(error => console.log(error));
     }, [id]);
@@ -41,13 +44,24 @@ export default function MovieAddstar() {
     // Handle checkbox changes
     const handleStarChange = (event) => {
         const { value, checked } = event.target;
+        console.log("Checkbox changed:", value, checked); // Debug
+        
         setStar(prevStars => {
             if (checked) {
-                return [...prevStars, value];  // Add the selected star
+                return [...prevStars, value]; // Add the selected star
             } else {
-                return prevStars.filter(star => star !== value);  // Remove the deselected star
+                return prevStars.filter(s => s !== value); // Remove the deselected star
             }
         });
+    };
+
+    // Hàm kiểm tra xem một star có được chọn không
+    const isStarSelected = (starId) => {
+        // Chuyển đổi để đảm bảo so sánh cùng kiểu dữ liệu
+        const id = String(starId);
+        const result = star.map(s => String(s)).includes(id);
+        console.log(`Checking star ${starId}: ${result}`); // Debug
+        return result;
     };
 
     function handleUpdate(e) {
@@ -64,12 +78,14 @@ export default function MovieAddstar() {
             const updatedMovie = {
                 title: movie,
                 release: mRelease,
-                producer:mPro,
+                producer: mPro,
                 genres: mGenres,
                 description: mDes,
                 stars: star,
                 director: mDirec
             };
+
+            console.log("Updating movie with stars:", star); // Debug
 
             fetch(`http://localhost:9999/movies/${id}`, {
                 method: "PUT",
@@ -100,11 +116,11 @@ export default function MovieAddstar() {
                         <Form.Label>Star</Form.Label>
                         {allStars?.map(s => (
                             <Form.Check
-                                key={s.id}  // Assuming `s.id` is unique for each star
+                                key={s.id}
                                 type="checkbox"
-                                label={s.fullname}  // Assuming `s.fullname` is the star's name
+                                label={s.fullname}
                                 value={s.id}
-                                checked={mStar.includes(s.id) || star.includes(s.id)} // Mark the current and selected stars as checked
+                                checked={isStarSelected(s.id)}
                                 onChange={handleStarChange}
                             />
                         ))}
